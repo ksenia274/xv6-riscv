@@ -40,8 +40,7 @@ main(int argc, char *argv[])
         fprintf(2, "Некорректный формат данных.\n");
         exit(1);
     }
-        int sum =  num1 + num2;
-        printf("%d\n", sum);
+        printf("%d\n", sum(num1, num2)); //системный вызов
 
     exit(0);
 }
