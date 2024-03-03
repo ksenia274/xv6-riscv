@@ -11,7 +11,7 @@ main(int argc, char *argv[])
 
     char *input_ptr = input;
     for (int i = 0; i < 100; i++) {
-        if (read(0, input_ptr, 1) != 1) {
+        if (read(0, input_ptr, 1) <= 0) {
             fprintf(2, "Ошибка чтения файла.\n");
             exit(1);
         }
