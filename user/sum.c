@@ -16,7 +16,7 @@ main(int argc, char *argv[])
             exit(1);
         }
 
-        if (*input_ptr == '\0' || *input_ptr == '\n' )
+        if (*input_ptr == '\0' || *input_ptr == '\n' || *input_ptr == '\r' )
             break;
 
         input_ptr++;
@@ -29,7 +29,7 @@ main(int argc, char *argv[])
     else {
         token1 = input;
     }
-    if (!token1 ||( *token1 == '\n')) {
+    if (!token1 ||( *token1 == '\n' || *token1 == '\r')) {
         fprintf(2, "Некорректный формат данных.\n");
         exit(1);
     }
@@ -38,7 +38,7 @@ main(int argc, char *argv[])
 
     token2 = strchr(token1, ' ');
     token2++;
-    if (!token2 ||( *token2 == '\n')) {
+    if (!token2 ||( *token2 == '\n' || *token2 == '\r')) {
         fprintf(2, "Некорректный формат данных. Отсутствует второе число.\n");
         exit(1);
     }
