@@ -4,7 +4,6 @@
 
 int main() {
     int pid;
-
     pid = fork();
 
     if (pid < 0) {
@@ -18,14 +17,9 @@ int main() {
         printf("Parent PID: %d\n", getpid());
         printf("Child PID: %d\n", pid);
         int status;
-        // Вариант (a)
         wait(&status);
         printf("Child process %d exited with status %d\n", pid, status);
 
-        // Вариант (b)
-//        kill(pid, SIGKILL);
-//        waitpid(pid, &status, 0);
-//        printf("Killed child process %d exited with status %d\n", pid, WEXITSTATUS(status));
     }
 
     return 0;
