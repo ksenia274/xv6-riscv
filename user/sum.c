@@ -11,12 +11,13 @@ main(int argc, char *argv[])
 
     char *input_ptr = input;
     for (int i = 0; i < 100; i++) {
-        if (read(0, input_ptr, 1) <= 0) {
+        int status = read(0, input_ptr, 1);
+        if (status < 0) {
             fprintf(2, "Ошибка чтения файла.\n");
             exit(1);
         }
 
-        if (*input_ptr == '\0' || *input_ptr == '\n' || *input_ptr == '\r' )
+        if (*input_ptr == '\0' || *input_ptr == '\n' || *input_ptr == '\r' || status == 0)
             break;
 
         input_ptr++;
