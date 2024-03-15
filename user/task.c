@@ -32,7 +32,7 @@ int main(int argc, char **argv) {
         printf("Parent PID: %d\n", getpid());
         printf("Child PID: %d\n", pid);
         close(p[0]); //закрываем чтение
-        char input[100];
+
         int len;
         for (int i = 1; i < argc; i++) {
             len = strlen(argv[i]);
@@ -41,7 +41,7 @@ int main(int argc, char **argv) {
                 wait(0);
                 printf("Overflow.\n");
             }
-            if (write(p[1], input, len) != len) {
+            if (write(p[1], argv[i], len) != len) {
                 printf("write error");
                 exit(1);
             }
