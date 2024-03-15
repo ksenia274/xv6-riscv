@@ -44,9 +44,14 @@ int main(int argc, char **argv) {
                 wait(0);
                 printf("Overflow.\n");
             }
-            strcpy(input, argv[i]);
-            write(p[1], input, len);
-            write(p[1], "\n", sizeof("\n"));
+            if (write(p[1], input, len) != len) {
+                printf("write error");
+                exit(1);
+            }
+            if (write(p[1], "\n", sizeof("\n")) != 1){
+                printf("write error");
+                exit(1);
+            }
         }
         close(p[1]);
         wait(0);
