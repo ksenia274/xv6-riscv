@@ -70,8 +70,8 @@ void            log_write(struct buf*);
 void            begin_op(void);
 void            end_op(void);
 
-// malloc.c
-void mutex_init(void);
+// mutex.c
+void init_mutex(void);
 
 // pipe.c
 int             pipealloc(struct file**, struct file**);
