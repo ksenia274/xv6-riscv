@@ -27,7 +27,7 @@ int main (int argc, char** argv){
         }
     }
     struct procinfo* curp;
-    for (int i = 0; i < lim; ++i) {
+    for (int i = 1; i <= lim; ++i) {
         curp = plist + i;
         printf("Process - name: %s, state: %s, parent PID: %d\n",
                curp->name,
