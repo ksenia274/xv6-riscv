@@ -707,7 +707,9 @@ ps_listinfo(struct procinfo *plist, int lim){
                     res.pid = -1;
                 } else {
                     struct proc* parent = curproc->parent;
+                    acquire(&(parent->lock));
                     res.pid = parent->pid;
+                    release(&(parent->lock));
                 }
                 release(&wait_lock);
                 if (copyout(myp->pagetable, (uint64)(dir), (char*)&res, sizeof(res)) == -1) {

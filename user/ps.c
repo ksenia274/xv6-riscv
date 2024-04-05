@@ -17,10 +17,6 @@ int main (int argc, char** argv){
 
     struct procinfo plist[bufsize];
     while (1){
-        if (plist == 0) {
-            fprintf(2, "Memory error\n");
-            exit(1);
-        }
 
         lim = ps_listinfo(plist, bufsize);
         if (lim == -1) {
