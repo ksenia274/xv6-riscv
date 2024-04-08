@@ -27,6 +27,12 @@ extern char trampoline[]; // trampoline.S
 // must be acquired before any p->lock.
 struct spinlock wait_lock;
 
+
+extern struct mutex_table {
+    struct spinlock table_splock; // Спин-лок для защиты таблицы
+    struct mutex mutex_list[NMUTEX];  // Глобальная таблица мьютексов
+} mtable;
+
 // Allocate a page for each process's kernel stack.
 // Map it high in memory, followed by an invalid
 // guard page.
@@ -325,13 +331,15 @@ fork(void)
   acquire(&np->lock);
   np->state = RUNNABLE;
 
-
+  acquire(&(mtable.table_splock));
   for (i = 0; i < NOMUTEX; ++i) {
       np->omutex[i] = p->omutex[i];
       if (np->omutex[i] != 0) {
           ++np->omutex[i]->proc_number;
       }
   }
+  release(&(mtable.table_splock));
+
   release(&np->lock);
 
   return pid;
@@ -391,11 +399,14 @@ exit(int status)
   p->state = ZOMBIE;
 
   release(&wait_lock);
+
+  acquire(&(mtable.table_splock));
   for (int i = 0; i < NOMUTEX; ++i) {
       if (p->omutex[i] != 0) {
           --p->omutex[i]->proc_number;
       }
   }
+  release(&(mtable.table_splock));
   // Jump into the scheduler, never to return.
   sched();
   panic("zombie exit");
