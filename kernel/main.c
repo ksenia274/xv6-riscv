@@ -4,6 +4,7 @@
 #include "riscv.h"
 #include "defs.h"
 
+
 volatile static int started = 0;
 
 // start() jumps here in supervisor mode on all CPUs.
@@ -39,6 +40,7 @@ main()
     kvminithart();    // turn on paging
     trapinithart();   // install kernel trap vector
     plicinithart();   // ask PLIC for device interrupts
+    message_buf_init();
   }
 
   scheduler();        

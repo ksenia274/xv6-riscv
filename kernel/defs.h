@@ -8,6 +8,7 @@ struct spinlock;
 struct sleeplock;
 struct stat;
 struct superblock;
+struct queue;
 
 // bio.c
 void            binit(void);
@@ -69,6 +70,10 @@ void            initlog(int, struct superblock*);
 void            log_write(struct buf*);
 void            begin_op(void);
 void            end_op(void);
+
+// message_buf.c
+void            message_buf_init(void);
+void            pr_msg(const char* fmt, ...);
 
 // pipe.c
 int             pipealloc(struct file**, struct file**);
@@ -179,6 +184,9 @@ void            plicinit(void);
 void            plicinithart(void);
 int             plic_claim(void);
 void            plic_complete(int);
+
+// queue.c
+void            queue_add_char(struct queue *, char);
 
 // virtio_disk.c
 void            virtio_disk_init(void);
