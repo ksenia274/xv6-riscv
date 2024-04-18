@@ -5,9 +5,9 @@
 
 
 int main (int argc, char *argv[]){
-    char m[PAGESIZE];
+    char* m = malloc(PAGENUM * PAGESIZE + 1);
 
-    if (dmesg((uint64)m) < 0) {
+    if (dmesg(m) < 0) {
         fprintf(2, "Adress error: unknown\n");
         exit(1);
     }

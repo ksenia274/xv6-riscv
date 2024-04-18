@@ -52,19 +52,19 @@ void pr_msg(const char* fmt, ...){
     if (fmt == 0){
         panic("fmt error: empty");
     }
-
-    queue_add_char(&queue, '[');
-    acquire(&tickslock);
-    int cur_ticks = ticks;
-    pr_msg_num(cur_ticks, 10, 1);
-    release(&tickslock);
-    queue_add_char(&queue, ']');
-    queue_add_char(&queue, ' ');
-
     char* s;
     va_list ap;
     int i;
     char c;
+    acquire(&tickslock);
+    int cur_ticks = ticks;
+    release(&tickslock);
+
+    acquire(&queue.lock);
+    queue_add_char(&queue, '[');
+    pr_msg_num(cur_ticks, 10, 1);
+    queue_add_char(&queue, ']');
+    queue_add_char(&queue, ' ');
 
     va_start(ap, fmt);
     for (i = 0; (c = fmt[i]) != 0; i++) {
@@ -105,9 +105,10 @@ void pr_msg(const char* fmt, ...){
     va_end(ap);
 
     queue_add_char(&queue, '\n');
+    release(&queue.lock);
 }
 
-uint64
+int
 sys_dmesg(void) {
     char last = 0;
     uint64 ptr, n;
