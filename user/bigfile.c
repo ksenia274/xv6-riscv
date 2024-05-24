@@ -24,6 +24,7 @@ int create_random_file(char *filename, int size) {
         printf("Error creating file\n");
         exit(1);
     }
+
     int pointer = 0;
     int wsize = 0;
     for (int i = 0; i < size; i += 4) {
