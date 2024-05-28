@@ -98,7 +98,7 @@ int accessed(pagetable_t pg, uint64 pointer, int page){
             ans = 1;
             *pte &= ~PTE_A;
         }
-        pointer += PGSIZE;
+        pointer += (1L<<12);
     }
     return ans;
 }
@@ -111,7 +111,7 @@ uint64 sys_pgaccess(void) {
     argaddr(0, &pointer);
     argint(1, &page);
     argaddr(2, &res);
-    page = (page + PGSIZE - 1)/ PGSIZE;
+    page = (page + (1L<<12) - 1)/ (1L<<12);
     int ans = accessed(pg, pointer, page);
     if (copyout(pg, res, (char *)&ans, sizeof(ans)) < 0) {
         return -1;
