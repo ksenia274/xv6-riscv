@@ -92,6 +92,7 @@ sys_uptime(void)
 
 int accessed(pagetable_t pg, uint64 pointer, int pages){
     int ans = 0;
+
     for (int i = 0; i < pages; ++i) {
         pte_t *pte = walk(pg, pointer, 0);
         if (*pte & PTE_A) {
