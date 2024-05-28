@@ -469,6 +469,9 @@ void vmprint(pagetable_t pagetable, int level) {
         if (pte & PTE_V) {
             printf(" v");
         }
+        if (pte & PTE_A) {
+            printf(" a");
+        }
 
         printf("\n");
         int PTE_PG = PTE_R|PTE_W|PTE_X;
