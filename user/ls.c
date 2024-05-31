@@ -1,7 +1,8 @@
 #include "kernel/types.h"
+#include "kernel/fs.h"
+#include "kernel/param.h"
 #include "kernel/stat.h"
 #include "user/user.h"
-#include "kernel/fs.h"
 
 char*
 fmtname(char *path)
@@ -22,6 +23,9 @@ fmtname(char *path)
   return buf;
 }
 
+
+
+
 void
 ls(char *path)
 {
@@ -29,6 +33,7 @@ ls(char *path)
   int fd;
   struct dirent de;
   struct stat st;
+  char targetpath[MAXPATH];
 
   if((fd = open(path, 0)) < 0){
     fprintf(2, "ls: cannot open %s\n", path);
@@ -46,7 +51,9 @@ ls(char *path)
   case T_FILE:
     printf("%s %d %d %l\n", fmtname(path), st.type, st.ino, st.size);
     break;
-
+  case T_SYMLINK:
+      memset(targetpath, 0, MAXPATH);
+      printf("%s %d %d %d -> %s\n", fmtname(path),  (&st)->type,  (&st)->ino,  (&st)->size, targetpath);
   case T_DIR:
     if(strlen(path) + 1 + DIRSIZ + 1 > sizeof buf){
       printf("ls: path too long\n");
@@ -60,11 +67,20 @@ ls(char *path)
         continue;
       memmove(p, de.name, DIRSIZ);
       p[DIRSIZ] = 0;
-      if(stat(buf, &st) < 0){
+      if(lstat(buf, &st) < 0){
         printf("ls: cannot stat %s\n", buf);
         continue;
       }
-      printf("%s %d %d %d\n", fmtname(buf), st.type, st.ino, st.size);
+      if (st.type == T_SYMLINK) {
+          char newtargetpath[MAXPATH];
+          memset(newtargetpath, 0, MAXPATH);
+          if (readlink(buf, newtargetpath) < 0) {
+              printf("%s %d %d %d -> %s\n", fmtname(buf), (&st)->type,  (&st)->ino,  (&st)->size, newtargetpath);
+          }
+
+      } else {
+        printf("%s %d %d %d\n", fmtname(buf), st.type, st.ino, st.size);
+      }
     }
     break;
   }
